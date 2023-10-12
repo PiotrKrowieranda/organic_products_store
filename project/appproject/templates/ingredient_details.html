@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Szczegóły Składnika</title>
+</head>
+<body>
+
+{% extends 'base.html' %}
+
+{% block title %}Szczegóły Składnika{% endblock %}
+
+{% block content %}
+{% load static %}
+  <h1>Szczegóły składnika: {{ ingredient.name }}</h1>
+  <p><strong>Nazwa:</strong> {{ ingredient.name }}</p>
+  <p><strong>Opis:</strong> {{ ingredient.description }}</p>
+  <p><strong>Obraz:</strong></p>
+  {% if ingredient.image %}
+  <img src=" {{ ingredient.image.url }}" alt="{{ ingredient.name }}" style="max-width: 300px; max-height: 300px;">
+  {% endif %}
+  <br><br>
+  <a href="{% url 'ingredient_list' %}">Powrót do listy składników</a>
+{% endblock %}
+</body>
+</html>

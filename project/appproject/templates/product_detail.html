@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Szczegóły Produktu: {{ product.name }}{% endblock %}
+
+{% block content %}
+    <h2>Szczegóły produktu: {{ product.name }}</h2>
+
+    {% if product.image %}
+    <img src="{{ product.image.url }}" alt="{{ product.name }}" width="100">
+    {% endif %}
+
+    <p><strong>Opis:</strong> {{ product.description }}</p>
+    <p><strong>Cena:</strong> {{ product.price }}</p>
+    <p><strong>VAT:</strong> {{ product.vat }}</p>
+    <p><strong>Dostępność:</strong> {{ product.stock }} sztuk</p>
+
+    <p><strong>Kategorie:</strong>
+        {% for category in product.categories.all %}
+            {{ category.category_name }}
+        {% empty %}
+            Brak kategorii.
+        {% endfor %}
+    </p>
+
+    <p><strong>Składniki:</strong>
+        {% for ingredient in product.ingredients.all %}
+            {{ ingredient.name }}
+        {% empty %}
+            Brak składników.
+        {% endfor %}
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ cart_item_form.as_p }}
+        <button type="submit">Dodaj do koszyka</button>
+    </form>
+
+    {% if perms.appproject.change_product %}
+        <a href="{% url 'edit_product' product.id %}">Edytuj</a>
+    {% endif %}
+
+    {% if perms.appproject.delete_product %}
+        <a href="{% url 'delete_product' product.id %}">Usuń</a>
+    {% endif %}
+{% endblock %}

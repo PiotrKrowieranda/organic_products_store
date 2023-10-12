@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Cart{% endblock %}
+
+{% block content %}
+    <h2>Your Cart</h2>
+    <ul>
+        {% for cart_item in cart_items %}
+            <li>{{ cart_item.product.name }} - {{ cart_item.quantity }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'place_order' %}">Place Order</a>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Discount Code{% endblock %}
+
+{% block content %}
+    <h2>Add Discount Code</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="code">Discount Code:</label>
+        <input type="text" name="code" id="code"><br>
+        <button type="submit">Apply Code</button>
+    </form>
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+{% endblock %}

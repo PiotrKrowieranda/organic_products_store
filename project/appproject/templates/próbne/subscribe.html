@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Subscribe{% endblock %}
+
+{% block content %}
+    <h2>Subscribe</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="subscription_plan">Subscription Plan:</label>
+        <select name="subscription_plan" id="subscription_plan">
+            <option value="basic">Basic</option>
+            <option value="premium">Premium</option>
+        </select><br>
+        <button type="submit">Subscribe</button>
+    </form>
+{% endblock %}

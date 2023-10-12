@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wyszukiwarka</title>
+</head>
+<body>
+{% extends 'base.html' %}
+
+{% block title %}Wszukiwarka{% endblock %}
+
+{% block content %}
+
+
+    <h1>Wyszukiwarka</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Szukaj">
+    </form>
+{% endblock %}
+</body>
+</html>

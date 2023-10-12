@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Orders{% endblock %}
+
+{% block content %}
+    <h2>Your Orders</h2>
+    <ul>
+        {% for order in orders %}
+            <li>{{ order.order_date }} - Total Amount: {{ order.total_amount }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

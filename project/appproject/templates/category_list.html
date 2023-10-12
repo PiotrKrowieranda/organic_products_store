@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista Składników</title>
+</head>
+<body>
+
+{% extends 'base.html' %}
+
+{% block title %}Lista kategorii{% endblock %}
+
+{% block content %}
+<h1>Lista kategorii</h1>
+
+<ul>
+    {% for category in categories %}
+    <li>
+        <a href="{% url 'category_details' category.id %}">{{ category.category_name }}</a>
+
+        {% if perms.appproject.change_category %}
+            <a href="{% url 'edit_category' category.id %}">Edytuj</a>
+        {% endif %}
+
+        {% if perms.appproject.delete_category %}
+            <a href="{% url 'delete_category' category.id %}">Usuń</a>
+        {% endif %}
+
+    </li>
+    {% empty %}
+    <li>Brak dostępnych kategorii.</li>
+    {% endfor %}
+</ul>
+
+{% if perms.appproject.add_category %}
+    <a href="{% url 'add_category' %}">Dodaj nową kategorię</a>
+{% endif %}
+{% endblock %}
+</body>
+</html>

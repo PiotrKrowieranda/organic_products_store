@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Favorite Products{% endblock %}
+
+{% block content %}
+    <h2>Your Favorite Products</h2>
+    <ul>
+        {% for favorite_product in favorite_products %}
+            <li>{{ favorite_product.product.name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

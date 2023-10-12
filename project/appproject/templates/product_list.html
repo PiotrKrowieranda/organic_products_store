@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista Składników</title>
+</head>
+<body>
+
+{% extends 'base.html' %}
+
+{% block title %}Lista Produktów{% endblock %}
+
+{% block content %}
+    <h2>Lista produktów</h2>
+    <ul>
+    {% for product in products %}
+        <li>
+            <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
+
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" width="100">
+            {% endif %}
+
+            <a href="{% url 'product_detail' product.id %}">Szczegóły</a>
+
+            {% if perms.appproject.change_product %}
+                <a href="{% url 'edit_product' product.id %}">Edytuj</a>
+            {% endif %}
+
+            {% if perms.appproject.delete_product %}
+                <a href="{% url 'delete_product' product.id %}">Usuń</a>
+            {% endif %}
+
+            <p>Stan magazynowy: {{ product.stock }} sztuk</p>
+
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'index' %}">
+                {% csrf_token %}
+                {{ cart_item_form.quantity }}
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <button type="submit">Dodaj do koszyka</button>
+            </form>
+            {% else %}
+                <p>Aby dodać do koszyka, musisz być zalogowany.</p>
+            {% endif %}
+        </li>
+    {% empty %}
+        <li>Brak dostępnych produktów.</li>
+    {% endfor %}
+    </ul>
+
+{% if perms.appproject.add_product %}
+    <a href="{% url 'add_product' %}">Dodaj nowy produkt</a>
+{% endif %}
+{% endblock %}
+
+</body>
+</html>

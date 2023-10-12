@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Twoje zamówienia</title>
+</head>
+<body>
+{% extends 'base.html' %}
+
+{% block title %}Twoje zamówienia{% endblock %}
+
+{% block content %}
+<h1>Twoje zamówienia</h1>
+
+<ul>
+  {% for order in orders %}
+  <li>
+    Zamówienie nr {{ order.id }} - Łączna kwota: {{ order.total_amount }} zł
+
+    <form method="post" action="{% url 'delete_order' order.id %}">
+      {% csrf_token %}
+      <button type="submit">Usuń zamówienie</button>
+    </form>
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
+</body>
+</html>

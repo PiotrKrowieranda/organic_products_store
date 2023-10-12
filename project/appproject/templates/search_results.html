@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wyniki wyszukiwania</title>
+</head>
+<body>
+{% extends 'base.html' %}
+
+{% block title %}Wszukiwarka{% endblock %}
+
+{% block content %}
+
+
+    <h1>Wyniki wyszukiwania:</h1>
+
+    <h2>Znalezione produkty:</h2>
+    <ul>
+        {% for product in products %}
+            <li>
+                <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
+            </li>
+        {% empty %}
+            <li>Brak znalezionych produktów.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Znalezione kategorie:</h2>
+    <ul>
+        {% for category in categories %}
+            <li>
+                <a href="{% url 'category_details' category.id %}">{{ category.category_name }}</a>
+            </li>
+        {% empty %}
+            <li>Brak znalezionych kategorii.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Znalezione składniki:</h2>
+    <ul>
+        {% for ingredient in ingredients %}
+            <li>
+                <a href="{% url 'ingredient_details' ingredient.id %}">{{ ingredient.name }}</a>
+            </li>
+        {% empty %}
+            <li>Brak znalezionych składników.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+</body>
+</html>

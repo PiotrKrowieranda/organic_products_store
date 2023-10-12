@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Twój koszyk</title>
+</head>
+<body>
+{% extends 'base.html' %}
+
+{% block title %}Twój koszyk{% endblock %}
+
+{% block content %}
+
+{% if messages %}
+{% for message in messages %}
+<h2>{{ message }}</h2>
+{% endfor %}
+{% endif %}
+
+<h1>Twój koszyk</h1>
+
+<form method="post" action="{% url 'update_cart' %}">
+  {% csrf_token %}
+  <table>
+    <thead>
+      <tr>
+        <th>Lp.</th>
+        <th>Nazwa produktu</th>
+        <th>Cena jednostkowa</th>
+        <th>Liczba</th>
+        <th>Cena łącznie</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for cart_item in cart_items %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ cart_item.product.name }}</td>
+        <td>{{ cart_item.product.price }} zł</td>
+        <td>
+          <input type="number" name="quantity_{{ cart_item.id }}" value="{{ cart_item.quantity }}" min="1" max="{{ cart_item.product.stock }}">
+        </td>
+        <td>{{ cart_item.subtotal }} zł</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <button type="submit" name="update_cart">Aktualizuj koszyk</button>
+</form>
+
+
+<form method="post" action="{% url 'clear_cart' %}">
+  {% csrf_token %}
+  <button type="submit">Wyczyść koszyk</button>
+</form>
+
+<h2>Całkowita cena koszyka: {{ total_price }} zł</h2>
+
+
+<form method="post" action="{% url 'cart' %}">
+  {% csrf_token %}
+  {{ order_form.as_p }}
+  <button type="submit">Złóż zamówienie</button>
+</form>
+
+
+
+{% endblock %}
+</body>
+</html>
+
+
+

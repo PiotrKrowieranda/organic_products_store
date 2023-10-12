@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Potwierdzenie usunięcia zamówienia</title>
+</head>
+<body>
+{% extends 'base.html' %}
+
+{% block title %}Potwierdzenie usunięcia zamówienia{% endblock %}
+
+{% block content %}
+<h1>Potwierdzenie usunięcia zamówienia</h1>
+
+<p>Czy na pewno chcesz usunąć zamówienie nr {{ order.id }}?</p>
+
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Tak, usuń zamówienie</button>
+  <a href="{% url 'your_orders' %}">Anuluj</a>
+</form>
+
+</body>
+</html>

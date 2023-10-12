@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Recenzje sklepu: {{ store.name }}</h2>
+  {% for review in reviews %}
+    <div>
+      <h3>Ocena: {{ review.get_rating_display }}</h3>
+      <p>Komentarz: {{ review.comment }}</p>
+      <p>Autor: {{ review.user }}</p>
+    </div>
+  {% empty %}
+    <p>Brak recenzji.</p>
+  {% endfor %}
+{% endblock %}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% extends 'base.html' %}
+
+{% block title %}Ulubione produkty{% endblock %}
+
+{% block content %}
+<h1>Ulubione produkty</h1>
+
+<ul>
+  {% for favorite_product in favorite_products %}
+  <li>
+    {{ favorite_product.product.name }}
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
+</body>
+</html>
