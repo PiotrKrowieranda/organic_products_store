@@ -158,4 +158,17 @@ def test_search_view(client, user):
     # Oczekujemy dostępu do widoku wyszukiwania
     assert response.status_code == 200
 
+@pytest.mark.django_db
+def test_add_product_view(client, admin_user):
+    # Logowanie jako administrator (lub inny użytkownik z uprawnieniami do dodawania produktów)
+    client.force_login(admin_user)
+    # Wysyłanie żądania GET na widok "add_product"
+    response = client.get(reverse('add_product'))
+    # Oczekujemy dostępu do widoku dodawania produktu
+    assert response.status_code == 200
+
+
+
+
+
 

@@ -1,38 +1,40 @@
 # organic_products_store
 
-Nazwa projektu: Sklep internetowy "organic_products_store"
+General description:
+"organic_products_store" is a web application that allows users to browse and purchase products online.
+The project is built based on the Django framework and is designed in a way that enables product management,
+categories, orders and ingredients.
 
-Opis ogólny:
-"organic_products_store" to aplikacja internetowa, która umożliwia użytkownikom przeglądanie i zakup produktów online. 
-Projekt jest zbudowany w oparciu o framework Django i jest zaprojektowany w sposób umożliwiający zarządzanie produktami, 
-kategoriami, zamówieniami i składnikami.
+main functions and features:
 
-Główne funkcje i cechy:
+    Product Browsing: Users can browse available products, search through the search engine, and browse product lists by category.
 
-    Przeglądanie Produktów: Użytkownicy mogą przeglądać dostępne produkty, przeszukiwać je za pomocą wyszukiwarki oraz przeglądać listy produktów według kategorii.
+    Adding Products: Store administrators can add new products by specifying their name, price, quantity in stock and assigned category.
 
-    Dodawanie Produktów: Administratorzy sklepu mogą dodać nowe produkty, określając ich nazwę, cenę, ilość w magazynie oraz przypisaną kategorię.
+    Category Management: Admins can manage product categories by creating new categories or editing existing ones.
 
-    Zarządzanie Kategoriami: Administratorzy mogą zarządzać kategoriami produktów, tworząc nowe kategorie lub edytując istniejące.
+    Component Management: Administrators can add new components by specifying a name and optionally assigning a photo.
 
-    Zarządzanie Składnikami: Administratorzy mogą dodawać nowe składniki, wskazując ich nazwę i opcjonalnie przypisując zdjęcie.
+    Shopping and Cart: Users can add products to the cart, select quantity and go through the ordering process.
 
-    Zakupy i Koszyk: Użytkownicy mogą dodawać produkty do koszyka, wybierać ilość i przejść przez proces składania zamówienia.
+    Orders: After placing an order, users can check their orders and delivery details.
 
-    Zamówienia: Po złożeniu zamówienia użytkownicy mogą sprawdzić swoje zamówienia i szczegóły dostawy.
+    Login and Registration: Users can create accounts, log in and manage their profile.
 
-    Logowanie i Rejestracja: Użytkownicy mogą tworzyć konta, logować się i zarządzać swoim profilem.
+    Administrator Features: Administrators have permissions to manage products, categories, ingredients and orders.
 
-    Funkcje Administratora: Administratorzy posiadają uprawnienia do zarządzania produktami, kategoriami, składnikami i zamówieniami.
+    Search: The application allows you to search for products, categories and ingredients.
 
-    Wyszukiwanie: Aplikacja umożliwia wyszukiwanie produktów, kategorii i składników.
+    Delete and Edit: Admins can delete products, ingredients, orders, and categories, as well as edit existing entries.
 
-    Usuwanie i Edycja: Administratorzy mogą usuwać produkty, składniki, zamówienia i kategorie, a także edytować istniejące wpisy.
 
-Dodatkowe uwagi:
+Additional remarks:
 
-Projekt "organic_products_store" to aplikacja, która pozwala na prostą i intuicyjną obsługę sklepu internetowego zarówno z perspektywy użytkownika, jak i administratora.
-Użytkownicy mogą łatwo przeglądać, zamawiać i zarządzać swoimi zamówieniami, a administratorzy mogą elastycznie zarządzać ofertą produktów, ich kategoriami oraz składnikami.
+The "organic_products_store" project is an application that allows for simple and intuitive operation of the online store, both from the user and administrator perspective.
+Users can easily view, order and manage their orders, and administrators can flexibly manage the product offer, their categories and ingredients.
 
-Aplikacja jest odpowiednia zarówno dla małych sklepów internetowych, jak i większych platform e-commerce, dzięki swojej skalowalności i łatwemu dostosowaniu do indywidualnych potrzeb biznesowych. 
-Dzięki spersonalizowanym kontom użytkowników, łatwemu przeglądaniu produktów i prostej procedurze składania zamówienia, "SuperStore" oferuje przyjazne i wygodne zakupy online.
+The application is suitable for both small online stores and larger e-commerce platforms, thanks to its scalability and easy adaptation to individual business needs.
+With personalized user accounts, easy product browsing and a simple ordering procedure, "SuperStore" offers friendly and convenient online shopping.
+
+
+
