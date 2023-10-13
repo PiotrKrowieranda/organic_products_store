@@ -21,7 +21,7 @@ from django.contrib import admin
 from appproject.views import (AddCategoryView, EditCategoryView, CategoryListView, CategoryDetailsView, DeleteCategoryView, AddIngredientView, EditIngredientView,
                               IngredientDetailsView, IngredientListView, DeleteIngredientView, LoginFormView, LogoutView, Add_UserView,
                               Reset_passwordView, ProfileView, AddProductView, EditProductView, DeleteProductView,
-                              ProductDetailView, ProductListView, SearchView, Order, CartView, YourOrdersView, ClearCartView, UpdateCartView, OrderDetailsView, DeleteOrderView)
+                              ProductDetailView, ProductListView, SearchView, Order, CartView, YourOrdersView, OrderDetailsView, DeleteOrderView, ClearCartView, UpdateCartView)
 
 
 urlpatterns = [

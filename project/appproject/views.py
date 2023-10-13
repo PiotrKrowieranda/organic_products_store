@@ -7,7 +7,6 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMix
 from django.contrib.contenttypes.models import ContentType
 from django.db import transaction
 
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
@@ -137,8 +136,8 @@ class OrderDetailsView(LoginRequiredMixin, View):
         return render(request, 'order_details.html', {'order': order, 'cart_items': cart_items})
 
 
-class DeleteOrderView(LoginRequiredMixin, PermissionRequiredMixin, View):
-    permission_required = 'appproject.delete_order'
+class DeleteOrderView(LoginRequiredMixin, View):
+    # permission_required = 'appproject.delete_order'
 
     # Widok usuwania zamówienia
     def post(self, request, order_id):
@@ -227,7 +226,8 @@ class Add_UserView(View):
                 email=email
             )
 
-            # Przekierowanie na stronę sukcesu lub inny widok
+            messages.success(request, "Użytkownik został pomyślnie zarejestrowany.")
+            # Przekierowanie na stronę logowania z komunikatem success
             return redirect('login')
         else:
             return render(request, 'register.html', {'form': form})

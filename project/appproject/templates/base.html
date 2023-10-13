@@ -126,12 +126,12 @@
     {% block menu %}
     <div id="menu">
         <ul>
-            <li><a href="{% url 'index' %}">Lista produktów</a></li>
-            <li><a href="{% url 'ingredient_list' %}">Lista składników</a></li>
-            <li><a href="{% url 'category_list' %}">Lista kategorii</a></li>
-            <li><a href="{% url 'search_view' %}">Szukaj </a></li>
-            <li><a href="{% url 'cart' %}">Koszyk</a></li>
-            <li><a href="{% url 'your_orders' %}">Twoje zamówienia</a></li>
+            <li><a class="tooltip" data-text="  zapraszamy do zapoznania się z naszą ofertą " href="{% url 'index' %}">Lista produktów</a></li>
+            <li><a class="tooltip" data-text="  do produktów" href="{% url 'ingredient_list' %}">Lista składników</a></li>
+            <li><a class="tooltip" data-text="  produktów" href="{% url 'category_list' %}">Lista kategorii</a></li>
+            <li><a class="tooltip" data-text="  produkty, składniki lub kategorie" href="{% url 'search_view' %}">Szukaj </a></li>
+            <li><a class="tooltip" data-text="  wyświetl zawartość" href="{% url 'cart' %}">Koszyk</a></li>
+            <li><a class="tooltip" data-text="  wyświetl zawartość" href="{% url 'your_orders' %}">Twoje zamówienia</a></li>
         </ul>
     </div>
     {% endblock %}
@@ -146,7 +146,7 @@
         &copy; 2023 omega style
     </div>
     {% if request.user.is_anonymous %}
-                <a href="{% url 'login' %}">zaloguj</a>
+                <a class="tooltip" data-text="  aby korzystać ze sklepu" href="{% url 'login' %}">zaloguj</a>
             {% else %}
                 <p>Nazwa zalogowanego usera: {{ request.user.username }}</p>
                 <a href="{% url 'logout-url' %}">wyloguj</a>
@@ -156,6 +156,7 @@
      </footer>
     {% endblock %}
 
+<script src="{% static 'app.js' %}"></script>
 </body>
 </html>
 
