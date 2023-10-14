@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edycja kategorii</title>
+</head>
+<body>
+{% extends 'base.html' %}
+
+{% block title %}Edycja kategorii{% endblock %}
+
+{% block content %}
+    <h1>Edytuj kategorię: {{ category.category_name }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+    </form>
+{% endblock %}
+</body>
+</html>

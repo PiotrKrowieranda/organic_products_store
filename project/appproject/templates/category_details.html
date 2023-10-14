@@ -5,16 +5,23 @@
     <title>Detale kategorii</title>
 </head>
 <body>
+{% extends 'base.html' %}
+
+{% block title %}szczegóły categorii{% endblock %}
+
+{% block content %}
+
     <h1>Detale kategorii: {{ category.category_name }}</h1>
 
     <h2>Produkty w tej kategorii:</h2>
     <ul>
         {% for product in products %}
             <li>
-                <a href="{% url 'product_details' product.id %}">{{ product.product_name }}</a>
-                - Cena brutto: {{ product.get_price_with_vat }}
+            <a href="{% url 'product_detail' product_id=product.id %}">{{ product.name }}</a>
             </li>
+
         {% endfor %}
     </ul>
+{% endblock %}
 </body>
 </html>

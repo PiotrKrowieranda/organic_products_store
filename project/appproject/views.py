@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.http import HttpResponseNotFound
 from .models import Ingredient, Product, Category, CartItem, Order
 from .forms import (IngredientForm, EditIngredientForm, IngredientDetailsForm, DeleteIngredientForm, CategoryForm, ProductForm,
-                    UserRegistrationForm, Reset_passwordForm, LoginForm, SearchForm, DeleteCategoryForm, DeleteProductForm, EditCategoryForm, OrderForm, CartItemForm, AddToCartForm )
+                    UserRegistrationForm, Reset_passwordForm, LoginForm, SearchForm, DeleteCategoryForm, DeleteProductForm, EditCategoryForm, OrderForm, CartItemForm, AddToCartForm, EditProductForm)
 
 class CartView(LoginRequiredMixin, View):
     # Widok koszyka zakupów
@@ -298,30 +298,23 @@ class AddCategoryView(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class EditCategoryView(LoginRequiredMixin, PermissionRequiredMixin, View):
-    #widok edycji kategorii
+    # Widok edycji kategorii
     permission_required = 'appproject.change_category'
 
     def post(self, request, id):
-
         category = get_object_or_404(Category, pk=id)
-        form = EditCategoryForm(request.POST)
+        form = EditCategoryForm(request.POST, instance=category)
 
         if form.is_valid():
             form.save()
             return redirect('category_list')
 
-        return render(request, 'edit_category.html',
-                      {'form': form, 'category': category})
+        return render(request, 'edit_category.html', {'form': form, 'category': category})
 
     def get(self, request, id):
-        # if not request.user.has_perm('appproject.change_category'):
-        #     messages.error(request, "Strona dostępna tylko dla administratora.")
-        #     return redirect('login')
-
         category = get_object_or_404(Category, pk=id)
-        form = EditCategoryForm(category=category)
-        return render(request, 'edit_category.html',
-                      {'form': form, 'category': category})
+        form = EditCategoryForm(instance=category)
+        return render(request, 'edit_category.html', {'form': form, 'category': category})
 
 
 class CategoryDetailsView(LoginRequiredMixin, View):
@@ -331,7 +324,8 @@ class CategoryDetailsView(LoginRequiredMixin, View):
         category = get_object_or_404(Category, pk=id)
 
         # Pobierz produkty przypisane do danej kategorii, posortowane alfabetycznie
-        products = Product.objects.filter(category=category).order_by('product_name')
+        products = Product.objects.filter(categories=category).order_by('name')
+
 
         return render(request, 'category_details.html', {'category': category, 'products': products})
 
@@ -489,34 +483,22 @@ class AddProductView(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class EditProductView(LoginRequiredMixin, PermissionRequiredMixin, View):
-    #widok edycji produktu
+    # Widok edycji produktu
     permission_required = 'appproject.change_product'
 
-    def post(self, request, product_id):
-        try:
-            product = Product.objects.get(id=product_id)
-        except Product.DoesNotExist:
-            return HttpResponseNotFound("Produkt nie istnieje")
-
-        form = EditCategoryForm(request.POST, instance=product)
+    def post(self, request, product_id):  # Zmieniamy argument na 'product_id'
+        product = get_object_or_404(Product, pk=product_id)
+        form = EditProductForm(request.POST, request.FILES, instance=product)
 
         if form.is_valid():
             form.save()
-            return redirect('index')
+            return redirect('product_list')
 
         return render(request, 'edit_product.html', {'form': form, 'product': product})
 
-    def get(self, request, product_id):
-        # if not request.user.has_permission('appproject.change_product'):
-        #     messages.error(request, "Strona dostępna tylko dla administratora.")
-        #     return redirect('login')
-
-        try:
-            product = Product.objects.get(id=product_id)
-        except Product.DoesNotExist:
-            return HttpResponseNotFound("Produkt nie istnieje")
-
-        form = EditCategoryForm(instance=product)
+    def get(self, request, product_id):  # Zmieniamy argument na 'product_id'
+        product = get_object_or_404(Product, pk=product_id)
+        form = EditProductForm(instance=product)
         return render(request, 'edit_product.html', {'form': form, 'product': product})
 
 

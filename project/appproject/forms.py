@@ -127,8 +127,29 @@ class CategoryForm(forms.ModelForm):
             raise ValidationError("Taka kategoria już istnieje.")
         return category_name
 
-
 class EditCategoryForm(forms.ModelForm):
+    """
+    Formularz edycji kategorii.
+    """
+
+    class Meta:
+        model = Category
+        fields = ['category_name']  # Tutaj możesz dodać pola kategorii, które chcesz edytować
+        widgets = {
+            'category_name': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        category_name = cleaned_data.get('category_name')
+
+        if not category_name:
+            raise forms.ValidationError("Pole 'Nazwa kategorii' jest wymagane.")
+
+        return cleaned_data
+
+
+class EditProductForm(forms.ModelForm):
     """
     Formularz edycji kategorii.
     """
