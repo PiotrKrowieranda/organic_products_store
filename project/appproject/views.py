@@ -492,7 +492,7 @@ class EditProductView(LoginRequiredMixin, PermissionRequiredMixin, View):
 
         if form.is_valid():
             form.save()
-            return redirect('product_list')
+            return redirect('index')
 
         return render(request, 'edit_product.html', {'form': form, 'product': product})
 

@@ -166,9 +166,6 @@ def test_add_product_view(client, admin_user):
     response = client.get(reverse('add_product'))
     # Oczekujemy dostępu do widoku dodawania produktu
     assert response.status_code == 200
-
-
-
-
+##
 
 
