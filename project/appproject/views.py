@@ -1,4 +1,6 @@
 
+from django.views.generic import (View, ListView, DetailView, CreateView, UpdateView, DeleteView)
+from django.urls import reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User, Permission
 from django.core.exceptions import ValidationError
@@ -11,8 +13,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
 from django.http import HttpResponseNotFound
+
 from .models import Ingredient, Product, Category, CartItem, Order
-from .forms import (IngredientForm, EditIngredientForm, IngredientDetailsForm, DeleteIngredientForm, CategoryForm, ProductForm,
+from .forms import (IngredientForm, DeleteIngredientForm, CategoryForm, ProductForm,
                     UserRegistrationForm, Reset_passwordForm, LoginForm, SearchForm, DeleteCategoryForm, DeleteProductForm, EditCategoryForm, OrderForm, CartItemForm, AddToCartForm, EditProductForm)
 
 class CartView(LoginRequiredMixin, View):
@@ -337,82 +340,158 @@ class CategoryListView(LoginRequiredMixin, View):
         return render(request, 'category_list.html', {'categories': categories})
 
 
-class AddIngredientView(LoginRequiredMixin, PermissionRequiredMixin, View):
-    # widok dodawania sklądnika
+# class AddIngredientView(LoginRequiredMixin, PermissionRequiredMixin, View):
+#     # widok dodawania sklądnika
+#     permission_required = 'appproject.add_ingredient'
+#     def get(self, request):
+#         form = IngredientForm()
+#         return render(request, 'add_ingredient.html', {'form': form})
+#
+#     def post(self, request):
+#
+#         form = IngredientForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             ingredient = form.save(commit=False)
+#             ingredient.image = request.FILES['image']
+#             ingredient.save()
+#             messages.success(request, "Dodano składnik")
+#             return redirect('add_ingredient')
+#         else:
+#             for field, errors in form.errors.items():
+#                 for error in errors:
+#                     messages.error(request, f"Błąd w polu {form.fields[field].label}: {error}")
+#             messages.error(request, "Proszę poprawić błędy w formularzu.")
+#         return render(request, 'add_ingredient.html', {'form': form})
+#
+#
+# class EditIngredientView(LoginRequiredMixin, PermissionRequiredMixin, View):
+#     permission_required = 'appproject.change_ingredient'
+#
+#
+#     def post(self, request, ingredient_id):
+#
+#         ingredient = get_object_or_404(Ingredient, pk=ingredient_id)
+#         form = IngredientForm(request.POST, request.FILES, instance=ingredient)
+#
+#         if form.is_valid():
+#             form.save()
+#             return redirect('ingredient_list')
+#
+#         return render(request, 'edit_ingredient.html',
+#                       {'form': form, 'ingredient': ingredient})
+#
+#     def get(self, request, ingredient_id):
+#
+#         ingredient = get_object_or_404(Ingredient, pk=ingredient_id)
+#         form = IngredientForm(instance=ingredient)
+#         return render(request, 'edit_ingredient.html',
+#                       {'form': form, 'ingredient': ingredient})
+#
+#
+# class IngredientDetailsView(LoginRequiredMixin, View):
+#     def get(self, request, ingredient_id):
+#         ingredient = get_object_or_404(Ingredient, pk=ingredient_id)
+#         return render(request, 'ingredient_details.html', {'ingredient': ingredient})
+#
+#
+# class IngredientListView(LoginRequiredMixin, View):
+#     def get(self, request):
+#         ingredients = Ingredient.objects.all()
+#         return render(request, 'ingredient_list.html', {'ingredients': ingredients})
+
+class AddIngredientView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     permission_required = 'appproject.add_ingredient'
-    def get(self, request):
-        form = IngredientForm()
-        return render(request, 'add_ingredient.html', {'form': form})
+    model = Ingredient
+    form_class = IngredientForm
+    template_name = 'add_ingredient.html'
+    success_url = reverse_lazy('add_ingredient')
 
-    def post(self, request):
+    def form_valid(self, form):
+        ingredient = form.save(commit=False)
+        # Sprawdź, czy pole 'image' istnieje w danych żądania
+        if 'image' in self.request.FILES:
+            ingredient.image = self.request.FILES['image']
+        ingredient.save()
+        messages.success(self.request, "Dodano składnik")
+        return super().form_valid(form)
 
-        form = IngredientForm(request.POST, request.FILES)
-        if form.is_valid():
-            ingredient = form.save(commit=False)
-            ingredient.image = request.FILES['image']
-            ingredient.save()
-            messages.success(request, "Dodano składnik")
-            return redirect('add_ingredient')
-        else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"Błąd w polu {form.fields[field].label}: {error}")
-            messages.error(request, "Proszę poprawić błędy w formularzu.")
-        return render(request, 'add_ingredient.html', {'form': form})
+    def form_invalid(self, form):
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(self.request, f"Błąd w polu {form.fields[field].label}: {error}")
+        messages.error(self.request, "Proszę poprawić błędy w formularzu.")
+        return super().form_invalid(form)
 
-
-class EditIngredientView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class EditIngredientView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     permission_required = 'appproject.change_ingredient'
+    model = Ingredient
+    form_class = IngredientForm
+    template_name = 'edit_ingredient.html'
+    success_url = reverse_lazy('ingredient_list')
+
+    # Metoda pobierająca obiekt na podstawie parametru 'ingredient_id' przekazanego w adresie URL.
+    def get_object(self, queryset=None):
+        # Pobierz identyfikator składnika z adresu URL
+        ingredient_id = self.kwargs.get('ingredient_id')
+        # Znajdź składnik na podstawie identyfikatora
+        obj = get_object_or_404(Ingredient, pk=ingredient_id)
+        return obj
 
 
-    def post(self, request, ingredient_id):
-
-        ingredient = get_object_or_404(Ingredient, pk=ingredient_id)
-        form = EditIngredientForm(request.POST, request.FILES, instance=ingredient)
-
-        if form.is_valid():
-            form.save()
-            return redirect('ingredient_list')
-
-        return render(request, 'edit_ingredient.html',
-                      {'form': form, 'ingredient': ingredient})
-
-    def get(self, request, ingredient_id):
-
-        ingredient = get_object_or_404(Ingredient, pk=ingredient_id)
-        form = EditIngredientForm(instance=ingredient)
-        return render(request, 'edit_ingredient.html',
-                      {'form': form, 'ingredient': ingredient})
+class IngredientDetailsView(LoginRequiredMixin, DetailView):
+    model = Ingredient
+    template_name = 'ingredient_details.html'
 
 
-class IngredientDetailsView(LoginRequiredMixin, View):
-    def get(self, request, ingredient_id):
-        ingredient = get_object_or_404(Ingredient, pk=ingredient_id)
-        return render(request, 'ingredient_details.html', {'ingredient': ingredient})
 
+    def get_object(self, queryset=None):
+        # Pobierz identyfikator składnika z adresu URL
+        ingredient_id = self.kwargs.get('ingredient_id')
+        # Znajdź składnik na podstawie identyfikatora
+        obj = get_object_or_404(Ingredient, pk=ingredient_id)
+        return obj
 
-class IngredientListView(LoginRequiredMixin, View):
-    def get(self, request):
-        ingredients = Ingredient.objects.all()
-        return render(request, 'ingredient_list.html', {'ingredients': ingredients})
+class IngredientListView(LoginRequiredMixin, ListView):
+    model = Ingredient
+    template_name = 'ingredient_list.html'
+    context_object_name = 'ingredients'
 
+# class DeleteIngredientView(LoginRequiredMixin, PermissionRequiredMixin, View):
+#     permission_required = 'appproject.delete_ingredient'
+#     def post(self, request, ingredient_id):
+#         ingredient = get_object_or_404(Ingredient, pk=ingredient_id)
+#         form = DeleteIngredientForm(request.POST)
+#
+#         if form.is_valid() and form.cleaned_data['confirm_delete']:
+#             ingredient.delete()
+#             return redirect('ingredient_list')
+#
+#         return render(request, 'delete_ingredient.html', {'ingredient': ingredient, 'form': form})
+#
+#     def get(self, request, ingredient_id):
+#         ingredient = get_object_or_404(Ingredient, pk=ingredient_id)
+#         form = DeleteIngredientForm()
+#         return render(request, 'delete_ingredient.html', {'ingredient': ingredient, 'form': form})
 
-class DeleteIngredientView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class DeleteIngredientView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+
     permission_required = 'appproject.delete_ingredient'
-    def post(self, request, ingredient_id):
-        ingredient = get_object_or_404(Ingredient, pk=ingredient_id)
-        form = DeleteIngredientForm(request.POST)
 
-        if form.is_valid() and form.cleaned_data['confirm_delete']:
-            ingredient.delete()
-            return redirect('ingredient_list')
+    model = Ingredient
+    template_name = 'delete_ingredient.html'
+    success_url = reverse_lazy('ingredient_list')
 
-        return render(request, 'delete_ingredient.html', {'ingredient': ingredient, 'form': form})
+    def get_object(self, queryset=None):
+        ingredient_id = self.kwargs.get('ingredient_id')
+        return get_object_or_404(Ingredient, pk=ingredient_id)
 
-    def get(self, request, ingredient_id):
-        ingredient = get_object_or_404(Ingredient, pk=ingredient_id)
-        form = DeleteIngredientForm()
-        return render(request, 'delete_ingredient.html', {'ingredient': ingredient, 'form': form})
+    # Metoda obsługująca usuwanie obiektu.
+    def delete(self, request, *args, **kwargs):
+        # Wyświetlenie komunikatu potwierdzającego usunięcie obiektu.
+        messages.success(request, "Składnik został pomyślnie usunięty.")
+
+        # Wywołanie metody delete() z klasy nadrzędnej w celu wykonania właściwego usunięcia obiektu.
+        return super().delete(request, *args, **kwargs)
 
 
 class DeleteProductView(LoginRequiredMixin, PermissionRequiredMixin, View):

@@ -5,6 +5,77 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
 # Formularz dodawania lub edycji składnika
+# class IngredientForm(forms.ModelForm):
+#     """
+#     Formularz dodawania lub edycji składnika.
+#     """
+#     class Meta:
+#         model = Ingredient
+#         fields = ['name', 'description', 'image']
+#         widgets = {
+#             'name': forms.TextInput(attrs={'class': 'form-control'}),
+#             'image': forms.FileInput(attrs={'class': 'form-control-file'}),
+#         }
+#
+#
+#     def clean_name(self):
+#         # Walidacja nazwy składnika
+#         name = self.cleaned_data.get('name')
+#
+#         # Sprawdzenie, czy nazwa nie jest pusta
+#         if not name:
+#             self.add_error('name',"To pole jest wymagane.")
+#
+#         # Sprawdzenie, czy składnik o takiej nazwie już istnieje
+#         if Ingredient.objects.filter(name=name).exists():
+#             self.add_error('name',"Taki składnik już istnieje.")
+#
+#         return name
+#
+#
+#     def clean_description(self):
+#         # Walidacja opisu składnika
+#         description = self.cleaned_data.get('description')
+#         if not description:
+#             raise ValidationError("Pole opisu jest wymagane.")
+#         return description
+#
+# # Formularz edycji składnika
+# class EditIngredientForm(forms.ModelForm):
+#     """
+#     Formularz edycji składnika.
+#     """
+#     class Meta:
+#         model = Ingredient
+#         fields = ['name', 'description', 'image']
+#         widgets = {
+#             'name': forms.TextInput(attrs={'class': 'form-control'}),
+#             'image': forms.FileInput(attrs={'class': 'form-control-file'}),
+#         }
+#
+#     # Nadpisana walidacja nazwy składnika
+#     def clean_name(self):
+#         name = self.cleaned_data.get('name')
+#
+#         if not name:
+#             self.add_error('name',"To pole jest wymagane w Edycji.")
+#
+#         return name
+#
+# # Formularz do wyświetlania szczegółów składnika (tylko do odczytu)
+# class IngredientDetailsForm(forms.ModelForm):
+#     """
+#     Formularz do wyświetlania szczegółów składnika (tylko do odczytu).
+#     """
+#     class Meta:
+#         model = Ingredient
+#         fields = ['name', 'description', 'image']
+#         widgets = {
+#             'name': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
+#             'description': forms.Textarea(attrs={'class': 'form-control', 'readonly': True}),
+#             'image': forms.FileInput(attrs={'class': 'form-control-file', 'readonly': True}),
+#         }
+
 class IngredientForm(forms.ModelForm):
     """
     Formularz dodawania lub edycji składnika.
@@ -14,9 +85,9 @@ class IngredientForm(forms.ModelForm):
         fields = ['name', 'description', 'image']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
             'image': forms.FileInput(attrs={'class': 'form-control-file'}),
         }
-
 
     def clean_name(self):
         # Walidacja nazwy składnika
@@ -24,57 +95,22 @@ class IngredientForm(forms.ModelForm):
 
         # Sprawdzenie, czy nazwa nie jest pusta
         if not name:
-            raise ValidationError("To pole jest wymagane.")
+            raise forms.ValidationError("To pole jest wymagane.")
 
         # Sprawdzenie, czy składnik o takiej nazwie już istnieje
-        if Ingredient.objects.filter(name=name).exists():
-            raise ValidationError("Taki składnik już istnieje.")
+        if self.instance and Ingredient.objects.filter(name=name).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError("Taki składnik już istnieje.")
 
         return name
-
 
     def clean_description(self):
         # Walidacja opisu składnika
         description = self.cleaned_data.get('description')
         if not description:
-            raise ValidationError("Pole opisu jest wymagane.")
+            raise forms.ValidationError("Pole opisu jest wymagane.")
         return description
 
-# Formularz edycji składnika
-class EditIngredientForm(forms.ModelForm):
-    """
-    Formularz edycji składnika.
-    """
-    class Meta:
-        model = Ingredient
-        fields = ['name', 'description', 'image']
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'image': forms.FileInput(attrs={'class': 'form-control-file'}),
-        }
 
-    # Nadpisana walidacja nazwy składnika
-    def clean_name(self):
-        name = self.cleaned_data.get('name')
-
-        if not name:
-            raise forms.ValidationError("To pole jest wymagane w Edycji.")
-
-        return name
-
-# Formularz do wyświetlania szczegółów składnika (tylko do odczytu)
-class IngredientDetailsForm(forms.ModelForm):
-    """
-    Formularz do wyświetlania szczegółów składnika (tylko do odczytu).
-    """
-    class Meta:
-        model = Ingredient
-        fields = ['name', 'description', 'image']
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'readonly': True}),
-            'image': forms.FileInput(attrs={'class': 'form-control-file', 'readonly': True}),
-        }
 
 # Formularz potwierdzenia usunięcia składnika
 class DeleteIngredientForm(forms.Form):
@@ -122,9 +158,9 @@ class CategoryForm(forms.ModelForm):
     def clean_category_name(self):
         category_name = self.cleaned_data.get('category_name')
         if not category_name:
-            raise ValidationError("To pole jest wymagane.")
+            self.add_error('category_name', "To pole jest wymagane.")
         if Category.objects.filter(category_name=category_name).exists():
-            raise ValidationError("Taka kategoria już istnieje.")
+            self.add_error('category_name',"Taka kategoria już istnieje.")
         return category_name
 
 class EditCategoryForm(forms.ModelForm):
